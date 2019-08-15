@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../static/css/reset.css">
+    <title>Document</title>
+    <style>
+        #buyHead{
+            width:100%;
+            height: 1.207729rem;
+            position: fixed;
+            top: 0;
+        }
+        #buyHead .myOrder{
+            height: 1.207729rem;
+            background-color: #eeeeee; 
+        }
+        #buyHead .myOrder .goBack{
+            display:inline-block;
+            width: 1.207729rem;
+            height: 1.207729rem;
+            font: .724638rem '微软雅黑';
+            padding-left:  .241546rem;
+        }
+        #buyHead .myOrder span:nth-child(2){
+            display: inline-block;
+           padding-left: 2.415459rem;
+            font: .483092rem '微软雅黑';                            
+        }
+        #buyMiddle{
+            width: 100%;
+            position: absolute;
+            top: 1.207729rem;
+            overflow: auto;
+            padding: .241546rem;
+        }
+        #buyMiddle .client-infor{
+            height: 1.207729rem;
+            border-bottom: .096618rem #eee solid;
+            margin: .241546rem 0;
+        }
+        #buyMiddle .client-infor span:nth-child(1){
+            font-size: .483092rem;
+        }
+        #buyMiddle .client-infor span:nth-child(2){
+            font-size: .434783rem;
+        }
+        #buyMiddle .course-information> p{
+            font-size: .57971rem;
+        }
+        #buyMiddle .course-information .course{
+            width: 100%;
+            height: 3.140097rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: .362319rem 0;
+            border-bottom: .096618rem solid #eeeeee;
+        }
+        #buyMiddle .course-information .course .course-img{
+            width: 3.140097rem;
+            height: 2.415459rem;
+            background-color: pink;
+            margin-right: .241546rem;
+        }
+        #buyMiddle .course-information .course img{
+            width: 2.415459rem;
+            height: 2.415459rem;
+        }
+        #buyMiddle .course-information .course .course-price p{
+            font-size: .434783rem;
+        }
+        #buyMiddle .course-information .course .course-price p:nth-child(2){
+            color: red;
+            margin-top: .193237rem;
+        }
+        #buyMiddle .course-information> .course-money{
+            width: 100%;
+            margin-top: .241546rem;
+            position: relative;
+        }
+        #buyMiddle .course-information> .course-money >span{
+            font-size: .483092rem;
+            color: red;
+            position: absolute;
+            right: .724638rem;
+        }
+        #buy-footer{
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            height: 1.207729rem;
+        }
+        #buy-footer > div{
+            position: absolute;
+            right:.241546rem;
+            bottom: .241546rem;
+            width: 2.898551rem;
+            height: 1.207729rem;
+            background-color: #ea6311;
+            text-align: center;
+            line-height: 1.207729rem;
+            border-radius: .603865rem;
+        }
+        #buy-footer > div >span{
+            font-size: .434783rem;
+            color:white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="buyHead">
+        <div class="myOrder">
+            <span class="goBack">&lt;</span>
+            <span>确认购买</span>
+        </div>
+    </div>
+    <div id="buyMiddle">
+        <div class="client-infor">
+            <span>长孙静</span>
+            <span>18309283552</span>
+        </div>
+        <div class="course-information">
+            <p>商品信息</p>
+            <div class="course">
+                <div class="course-img"><img src="" alt=""></div>
+                <div class="course-price">
+                    <p>几个居然是个合肥见附件二五六结果立法机关</p>
+                    <p>¥</p>
+                </div>
+            </div>
+            <p class="course-money">订单总价<span>¥457</span></p>
+            <p class="course-money">需付款<span>¥457</span></p></div>
+    </div>
+    <div id="buy-footer">
+        <!-- <p>实付<span>¥457</span></p> -->
+        <div><span>提交订单</span></div>
+    </div>
+    <script>
+        document.documentElement.style.fontSize = document.documentElement.clientWidth / 10 + "px";
+    </script>
+</body>
+
+</html>

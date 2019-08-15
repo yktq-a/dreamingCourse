@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../static/css/common.css">
+    <title>Document</title>
+    <style>
+        html ,body{
+            height: 100%;
+        }
+        header{
+            width: 100%;
+            height: 1.618357rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: fixed;
+            top: 0;
+        }
+        header .search{
+            position: relative;
+        }
+        header .search input{
+            width: 6.280193rem;
+            height: .869565rem;
+            background-color: #eee;
+            border-radius: 0.434778rem;
+            color: #828179;
+            line-height: .869565rem; 
+            font-size: .434783rem;
+            text-align: center;
+            border: none;
+        }
+        header .shopping img{
+            width: .917874rem;
+            height: .917874rem;
+        }
+        header .search img{
+            width: .483092rem;
+            height: .483092rem;
+           position: absolute;
+           left: .821256rem;
+           top: .241546rem;
+        }
+        header .search span{
+            color: #828179;
+            height:.869565rem;
+            line-height: .869565rem; 
+            font-size: .434783rem;
+        }
+        section .left {
+            width: 2.512077rem;
+            height: 14.613527rem;
+            background-color: #cfe4d2;
+            position: fixed;
+            top:  1.618357rem;
+            bottom: 1.570048rem;
+            float: left;
+        }
+        section .left div{
+            height: 2.922705rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+
+        }
+        section .left div span{
+            font:bold .531401rem "宋体";
+            
+        }
+        section{
+            width: 100%;
+            position: absolute;
+            top:  1.618357rem;
+            bottom: 1.570048rem;
+            overflow: auto;
+        }
+        section .right{
+            margin-left: 2.512077rem;
+            overflow: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-content: space-between;
+        }
+        section .right li{
+            height: 3.623188rem;
+            width: 3.623188rem;
+            background-color: pink;
+            padding: .483092rem;
+        }
+        footer{
+            width: 100%;
+            height: 1.570048rem;
+            position: fixed;
+            bottom: 0;
+        }
+        footer div{
+            width: 25%;
+            height: 100%;
+           text-align: center;
+           float: left;
+        }
+        footer div a img{
+            width: 1.086957rem;
+            height: 1.086957rem;
+        }
+        footer div a p {
+            font-size: .434783rem;
+        }
+    </style>
+</head>
+<body>
+        <header>
+                <div class="search">
+                    <input type="text" value="算法.Vue.Js.">
+                    <img src="img/search.png" alt="">
+                </div>
+                <div class="shopping"><img src="img/shopping.png" alt=""></div>
+            </header>
+            <section>
+                <div class="left">
+                    <div class="html"><a href=""><span>前端开发</span></a></div>
+                    <div class="java"><a href=""><span>后端开发</span></a></div>
+                    <div class="compute"><a href=""><span>云计算与大数据</span></a></div>
+                    <div class="test"><a href=""><span>运维与测试</span></a></div>
+                    <div class="UI"><a href=""><span>UI设计</span></a></div>
+                </div>
+                <ul class="right">
+                    <li></li>
+                    <li></li>
+                </ul>
+            </section>
+    <footer>
+            <div><a href="">
+                <img src="img/noFirstPage.png" alt="">
+                <p>首页</p>
+            </a></div>
+            <div><a href="">
+                <img src="img/noSort.png" alt="">
+                <p>分类</p>
+            </a></div>
+            <div><a href="">
+                <img src="img/noStudy.png" alt="">
+                <p>我的学习</p>
+            </a></div>
+            <div><a href="">
+                <img src="img/noAdmin.png" alt="">
+                <p>账号</p>
+            </a></div>
+        </footer>
+    <script>
+            document.documentElement.style.fontSize = document.documentElement.clientWidth/10+"px";
+        </script>
+</body>
+</html>
