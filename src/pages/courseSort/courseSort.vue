@@ -43,7 +43,7 @@ export default {
     goDetailed(){
         this.$router.push({
             path:"/sortDetailed"
-        });
+        }); 
     },
         onclass(index){
             this.current = index;
@@ -52,10 +52,21 @@ export default {
             this.$router.push({
                 path:'/shoppingCart'
             });
-        }
+        },
+        /* getIncourseSort(){ 
+            let url = "url";
+            axios({
+                method:'get',
+                url:'',
+                params:{
+                    id:1
+                }
+            }).then(res=>{
+                console.log(res);
+            })
+        }  */
         
     }
-
 }
 
 </script>

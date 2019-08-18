@@ -222,7 +222,7 @@ export default {
 <style>
 #h-course-system {
   width: 100%;
- /*  position: fixed;
+ /*  position: fixed; 
   top: 0; */
 }
 
