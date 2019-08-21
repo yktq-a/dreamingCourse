@@ -15,7 +15,7 @@
                     </ul>
                 </div>
                 <ul class="right">
-                    <li v-for="(item, index) in schedule" :key="index" @click="goDetailed">{{item}}</li>
+                    <li v-for="(courseName) in schedule" :key="courseName" @click="goDetailed(courseName)">{{courseName}}</li>
                 </ul>
             </section>
             <footerGuide/>
@@ -40,32 +40,38 @@ export default {
         path: "/search"
       });
     },
-    goDetailed(){
-        this.$router.push({
-            path:"/sortDetailed"
-        }); 
+    goDetailed(courseName){
+        this.$router.push(
+            {
+            path:"/sortDetailed",
+            query:{
+                name:courseName
+            }
+        }
+        ); 
     },
         onclass(index){
             this.current = index;
+            this.getIncourseSort();
         },
         goShopping(){
             this.$router.push({
                 path:'/shoppingCart'
             });
         },
-        /* getIncourseSort(){ 
-            let url = "url";
-            axios({
+        getIncourseSort(){ 
+            this.$axios({
                 method:'get',
-                url:'',
+                url:'http://b3n79z.natappfre.cc/getparentlist',
                 params:{
-                    id:1
+                    id:this.current + 1
                 }
             }).then(res=>{
-                console.log(res);
+                this.schedule = res.data;
+            }).catch((error)=>{
+                console.log(error);
             })
-        }  */
-        
+        }
     }
 }
 

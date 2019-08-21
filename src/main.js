@@ -7,7 +7,7 @@ import { Swipe, SwipeItem } from "mint-ui";
 import 'mint-ui/lib/swipe/style.css'
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
-Vue.prototype.$ajax = axios;
+Vue.prototype.$axios = axios;
 Vue.prototype.$qs = qs;
 
 new Vue({

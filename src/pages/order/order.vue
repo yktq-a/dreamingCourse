@@ -14,7 +14,7 @@
         >{{order}}</div>
       </div>
     </div>
-    <div id="orderOutline" @touchstart="touchstart" @touchmove="touchmove" @touchendt="touchend">
+    <div id="orderOutline" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend">
       <ul ref="order" class="clearfix">
         <li id="allOrder">
           <div class="courseDetails">
@@ -49,7 +49,7 @@
               <span class="money">¥</span>
             </div>
             <div class="option">
-              <div class="comment" @touchstart="goComment">
+              <div class="comment" @touchend="goComment">
                 <span>评价课程</span>
               </div>
             </div>
@@ -68,7 +68,7 @@
               <span class="money">¥{{noComment.price}}</span>
             </div>
             <div class="option">
-              <div class="comment" @touchstart="goComment">
+              <div class="comment" @touchend="goComment">
                 <span>评价课程</span>
               </div>
             </div>
@@ -105,6 +105,12 @@ export default {
         }
       ]
     };
+  },
+  created() {
+    this.$axios({
+      method:"get",
+
+    })
   },
   methods: {
     v_payment(){

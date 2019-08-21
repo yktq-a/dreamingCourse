@@ -2,11 +2,8 @@
   <div>
     <div id="h-course-system">
       <div class="v-video">
-        <img src="../../../static/img/zyl.png" alt="">
-        <!-- <router-link :to="{path:'/courseSystems/videos',query:{}}"></router-link> -->
-        <!-- <router-link :to="`/courseSystems/videos/:${id}`"></router-link>
-        <router-view></router-view> -->
-        <video controls id="myVideo" ref="vo" :src="src"></video>
+        <img :src="courseSystems.mainImage" alt="" v-show="!playStatus">
+        <video controls id="myVideo" ref="vo" :src="videolink" v-show="playStatus" ></video>
       </div>
       <div class="goBack" @click="$router.back()">&lt;</div>
       <div id="plays" class="icon iconfont"  @click="playClick" v-show="isPlay">&#xe641;</div>
@@ -25,38 +22,34 @@
       <ul id="wrapCourse" ref="ref">
         <li id="course_details">
           <div class="className">
-            <h1>Android-基础学习实例</h1>
+            <h1>{{courseSystems.name}}</h1>
           </div>
           <div class="price">
-            <span class="vipPrice">会员：¥99.99</span>
-            <span class="usualPrice">原价：¥345.00</span>
-            <!-- <span class="noPrice">免费</span> -->
+            <span class="vipPrice" v-if="courseSystems.price != 0" >会员：¥{{courseSystems.activityPrice}}</span>
+            <span class="usualPrice" v-if="courseSystems.price != 0">原价：¥{{courseSystems.price}}</span>
+            <span class="noPrice" v-else>免费</span>
           </div>
           <div class="classLabel">
             <h1>课程标签</h1>
-            <span>零基础</span>
-            <span>交互设计</span>
-            <span>移动产品设计</span>
+            <span>{{courseSystems.tagName}}</span>
           </div>
           <div class="teachIntrod">
             <h1>老师介绍</h1>
             <div class="teacher clearfix">
-              <div class="headPicturl">
-                <img src="../../../static/img/zyl.png" alt />
+              <div class="headPicturl"> 
+                <img :src="courseSystems.tImage" alt />
               </div>
               <div class="teachBrief">
-                <span class="teachName">朱一龙</span>
+                <span class="teachName">{{courseSystems.tName}}</span>
                 <br/>
-                <span class="synopsis">国科大老规矩睡个懒觉反对浪费空间的概念房管局</span>
+                <span class="synopsis">{{courseSystems.tDesc}}</span>
               </div>
             </div>
           </div>
           <div class="courseDetails">
             <h1>课程详情</h1>
             <p>
-              此学堂是一款专业学习IT开发知识技能
-              的平台，由国内资深IT技术专家成立于
-              北京...
+             {{courseSystems.detail}}
             </p>
           </div>
         </li>
@@ -85,11 +78,14 @@
         <i class="icon iconfont">&#xe75b;</i>
         <span>咨询</span>
       </div>
-      <div class="shoppingCart" @click="goShopping">
+      <div class="shoppingCart" @click="goShopping" v-if="!courseSystems.isBuy&& courseSystems.price != 0">
         <span>加入购物车</span>
       </div>
-      <div class="nowBuy" @click="goBuy">
+      <div class="nowBuy" @click="goBuy" v-if="!courseSystems.isBuy&& courseSystems.price != 0">
         <span>立即购买</span>
+      </div>
+      <div id="learning"  @click="goShopping" v-show="courseSystems.price == 0||courseSystems.isBuy">
+        <span>立即学习</span>
       </div>
     </div>
   </div>
@@ -100,12 +96,23 @@ let startX = 0;
 export default {
   data() {
     return {
-     /*  id:001, */
-      src:"../../../static/Intermission-Walk-in.ogv",
-      /* message:[], */
+      courseSystems:{
+        isBuy:false,
+        mainImage:"../../../static/img/zyl.png",
+        activityPrice:99,
+        price:113,
+        tDesc:"国科大老规矩睡个懒觉反对浪费空间的概念房管局",
+        subtitle:"",
+        name:"Android-基础学习实例",
+        tName:"朱一龙",
+        detail:"此学堂是一款专业学习IT开发知识技能的平台，由国内资深IT技术专家成立于北京...",
+        tagName:"零基础",
+        tImage:"../../../static/img/zyl.png"
+      },
+      videolink:"../../../static/Intermission-Walk-in.ogv",
       show:0,
       current: 0,
-      playStatus:'',
+      playStatus:false,
       isPlay:true,
       vComments: ["详情", "章节", "评价"],
       studentComments: [
@@ -160,11 +167,38 @@ export default {
   },
   computed:{
     id:function(){
-      return this.$route.params.id;
+      return this.$route.query.id;
     }
+  },
+  created(){
+    console.log(this.$route.query.id);
+    let id=this.$route.query.id;
+      this.$axios({
+                method:'get',
+                url:'http://b3n79z.natappfre.cc/getcourse',
+                params:{
+                    courseId:id
+                }
+            }).then(res=>{
+                this.courseSystems = res.data;
+            }).catch((error)=>{
+                alert(error);
+            });
+            this.$axios({
+                method:'get',
+                url:'http://192.168.0.107:8080/user/saveViCourses',
+                params:{
+                    cid:id,
+                    uid:1
+                }
+            })
+  },
+  mounted() {
+    plus.screen.lockOrientation('landscape-primary');
   },
   methods: {
     playClick(){
+      this.playStatus = true;
       this.$refs.vo.play();
       this.isPlay = !this.isPlay ;
     },
@@ -247,8 +281,8 @@ export default {
 #h-course-system .v-video {
   width: 100%;
   height: 5.555556rem;
-  background-color: pink;
   position: relative;
+  background-color: #000;
 }
 .v-video img{
   width: 100%;
@@ -326,7 +360,7 @@ export default {
   text-align: center;
 }
 #f-coourse-system .shoppingCart span,
-.nowBuy span {
+.nowBuy span,#learning span {
   font: 0.57971rem "微软雅黑";
   color: white;
   height: 1.449275rem;
@@ -337,6 +371,14 @@ export default {
 }
 #f-coourse-system .nowBuy {
   background-color: #404ed1;
+}
+#f-coourse-system #learning{
+  width: 3.623188rem;
+  height: 1.449275rem;
+  text-align: center;
+ background-color: red;
+ position: absolute;
+ right: .241546rem;
 }
 #course_whell {
   width: 100%;

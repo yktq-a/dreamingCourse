@@ -8,15 +8,15 @@
     <div class="course-classification">
       <div
         class="course-classification-lists"
-        v-for="(item,index) in courseClassification"
-        :key="index" @click="goCourseDetails"
+        v-for="(item) in courseClassification"
+        :key="item.id" @click="goCourseDetails(item.id)"
       >
-        <img :src="item.img" alt />
+        <img :src="item.mainImage" alt />
         <div class="right-content">
           <h4>{{ item.name }}</h4>
           <p>
-            <span>￥ {{ item.new_price }}</span>
-            <span>￥ {{ item.old_price }}</span>
+            <span>￥ {{ item.activityPrice }}</span>
+            <span>￥ {{ item.price }}</span>
           </p>
         </div>
       </div>
@@ -28,82 +28,103 @@
 export default {
   data() {
     return {
-      sortDetailed: "Java",
+      sortDetailed: '',
       courseClassification: [
         {
+          id:1,
           name: "Android Hybrid App开发实战",
-          new_price: "199",
-          old_price: "99",
-          img: "../../../static/imgs/course-classification.png"
+          activityPrice: "199",
+          price: "99",
+          mainImage: "../../../static/imgs/course-classification.png"
         },
         {
+          id:2,
           name: "Android Hybrid App开发实战 我命由我",
-          new_price: "199",
-          old_price: "99",
-          img: "../../../static/imgs/course-classification.png"
+          activityPrice: "199",
+          price: "99",
+          mainImage: "../../../static/imgs/course-classification.png"
         },
         {
+          id:3,
           name: "Android Hybrid App开发实战",
-          new_price: "199",
-          old_price: "99",
-          img: "../../../static/imgs/course-classification.png"
+          activityPrice: "199",
+          price: "99",
+          mainImage: "../../../static/imgs/course-classification.png"
         },
         {
+          id:4,
           name: "Android Hybrid App开发实战",
-          new_price: "199",
-          old_price: "99",
-          img: "../../../static/imgs/course-classification.png"
+          activityPrice: "199",
+          price: "99",
+          mainImage: "../../../static/imgs/course-classification.png"
         },
         {
+          id:5,
           name: "Android Hybrid App开发实战",
-          new_price: "199",
-          old_price: "99",
-          img: "../../../static/imgs/course-classification.png"
+          activityPrice: "199",
+          price: "99",
+          mainImage: "../../../static/imgs/course-classification.png"
         },
         {
+          id:6,
           name: "Android Hybrid App开发实战",
-          new_price: "199",
-          old_price: "99",
-          img: "../../../static/imgs/course-classification.png"
+          activityPrice: "199",
+          price: "99",
+          mainImage: "../../../static/imgs/course-classification.png"
         },
         {
+          id:7,
           name: "Android Hybrid App开发实战",
-          new_price: "199",
-          old_price: "99",
-          img: "../../../static/imgs/course-classification.png"
+          activityPrice: "199",
+          price: "99",
+          mainImage: "../../../static/imgs/course-classification.png"
         },
         {
+          id:8,
           name: "Android Hybrid App开发实战",
-          new_price: "199",
-          old_price: "99",
-          img: "../../../static/imgs/course-classification.png"
+          activityPrice: "199",
+          price: "99",
+          mainImage: "../../../static/imgs/course-classification.png"
         },
         {
+          id:9,
           name: "Android Hybrid App开发实战",
-          new_price: "199",
-          old_price: "99",
-          img: "../../../static/imgs/course-classification.png"
+          activityPrice: "199",
+          price: "99",
+          mainImage: "../../../static/imgs/course-classification.png"
         },
         {
+          id:10,
           name: "Android Hybrid App开发实战",
-          new_price: "199",
-          old_price: "99",
-          img: "../../../static/imgs/course-classification.png"
+          activityPrice: "199",
+          price: "99",
+          mainImage: "../../../static/imgs/course-classification.png"
         },
         {
+          id:11,
           name: "Android Hybrid App开发实战",
-          new_price: "199",
-          old_price: "99",
-          img: "../../../static/imgs/course-classification.png"
+          activityPrice: "199",
+          price: "99",
+          mainImage: "../../../static/imgs/course-classification.png"
         },
         {
+          id:12,
           name: "Android Hybrid App开发实战",
-          new_price: "199",
-          old_price: "99",
-          img: "../../../static/imgs/course-classification.png"
+          activityPrice: "199",
+          price: "99",
+          mainImage: "../../../static/imgs/course-classification.png"
         }
       ]
     };
+  },
+  created() {
+    /* console.log(this.$route.query.name) */
+    name=this.$route.query.name;
+    this.sortDetailed = name;
+    this.$axios.get('http://b3n79z.natappfre.cc/getcourselist?name').then(res=>{
+      this.courseClassification = res.data;
+    })
+
   },
   methods: {
     toSearch() {
@@ -111,9 +132,13 @@ export default {
         path: "/search"
       });
     },
-    goCourseDetails(){
-      this.$router.push({
-        path:"/courseSystems"
+    goCourseDetails(id){
+      this.$router.push(
+        {
+        path:"/courseSystems",
+        query:{
+          id:id,
+        }
       });
     }
   }

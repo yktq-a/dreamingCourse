@@ -13,7 +13,7 @@ import shoppingCart from '../components/shoppingCart.vue'
 import confirmBuy from '../pages/order/confirmBuy.vue'
 import login from '../components/login.vue'
 import orderDetails from '../pages/order/orderDetails.vue'
-/* import videos from '../components/videos.vue' */
+/* import videos from '../pages/courseDetails/videos.vue' */
 import registration from '../components/registration.vue'
 import spikeCourseSystems from '../components/spikeCourseSystems.vue'
 Vue.use(VueRouter)
@@ -47,7 +47,7 @@ export default new VueRouter({
                     path:'videos/:id',
                     component:videos
                 }, 
-            ]   */
+            ]  */ 
         }, 
         {
             path:'/comment',
