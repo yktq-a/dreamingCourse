@@ -20,21 +20,6 @@ export default {
       list: []
     };
   },
-  created() {
-    this.$axios({
-      method: "get",
-      url: "http://yaobin.xyz/user/findAll",
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8'
-      }
-    })
-      .then(response => {
-        this.list = response.data;
-      })
-      .catch(err => {
-        console.log("服务器异常" + err);
-      });
-  }
 };
 </script>
 

@@ -158,7 +158,7 @@
 <script>
 import footerGuide from "../../components/footerGuide";
 
-export default { 
+export default {
   data() {
     const that = this;
     return {
@@ -169,39 +169,38 @@ export default {
       //抢购状态参数
       spikeStatus: [
         {
-          buttonContent: '',
+          buttonContent: "",
           status: "即将开抢",
           content: "限时特惠，即将开抢~",
           startPoint: "10:00",
           startTime: "2019-08-16 10:00",
           notStart: false,
           start: false,
-          end: false,
-          timeGap: 0
+          end: false
         },
-        { 
-          buttonContent: '',
+        {
+          buttonContent: "",
           status: "即将开抢",
           content: "限时特惠，即将开抢~",
           startPoint: "16:00",
           startTime: "2019-08-16 16:00",
           notStart: false,
           start: false,
-          end: false,
-          timeGap: 0
+          end: false
         },
         {
-          buttonContent: '',
+          buttonContent: "",
           status: "即将开抢",
           content: "限时特惠，即将开抢~",
           startPoint: "20:00",
           startTime: "2019-08-16 20:00",
           notStart: false,
           start: false,
-          end: false,
-          timeGap: 0
+          end: false
         }
       ],
+      //秒杀课程信息
+      spikeCourse: [],
       banner: [
         "../../../static/imgs/slideshow1.png",
         "../../../static/imgs/slideshow2.png",
@@ -209,11 +208,8 @@ export default {
         "../../../static/imgs/slideshow4.png"
       ],
       //广播数据
-      broadcastContent: [
-        "新人礼包大放送",
-        "微信小程序专栏上新啦!",
-        "开启你的暑期猿计划!"
-      ],
+      broadcastContent: [],
+      //课程推荐
       recommedCourse: [
         {
           name: "微信小程序入门",
@@ -275,6 +271,8 @@ export default {
           detailed: "全面系统Python3入门+进阶课程 零基础学Python 小黑也能听懂"
         }
       ],
+      //课程实践
+      practiceScourse: [],
       dis: 9.879227, // 原点起始位置
       distance: 0, // 外层嵌套的初始移动距离409px
       timeIndex: 0 //点击的秒杀时间段按钮
@@ -284,6 +282,10 @@ export default {
     footerGuide
   },
   mounted: function() {
+    this.getMarqeeInfo(); //请求广播
+    this.getSipkeInfo(0); //请求10点场秒杀
+    this.getRecommendCourse(); //请求课程详情
+    this.getPracticeScourse() //请求课程推荐
     var that = this;
     that.actualScourse.map(function(item) {
       that.$set(item, "disableed", false);
@@ -315,18 +317,22 @@ export default {
         path: "/homePage/announcementDetails"
       });
     },
-    toSpike(){
+    toSpike() {
       this.$router.push({
         path: "/homePage/spikeCourseSystems"
-      })
+      });
     },
-    toMore(){
+    toMore() {
       this.$router.push({
-        path:"/homePage/courseRecommendation"
-      })
+        path: "/homePage/courseRecommendation"
+      });
     },
+    //切换秒杀时间段
     jump(index) {
-      // var target = -(index * this.dis);
+      //已经存在则不再发送请求，不存在则发送请求获取数据
+      if (!this.spikeCourse[index]) {
+        this.getSipkeInfo(index);
+      }
       this.timeIndex = index;
       this.distance = -(index * this.dis);
 
@@ -391,6 +397,73 @@ export default {
           this.spikeStatus[i].end = true;
         }
       }
+    },
+    //获取公告数据
+    getMarqeeInfo() {
+      this.$axios({
+        method: "get",
+        url: "http://192.168.0.111:8080/notice",
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      })
+        .then(response => {
+          for (var i = 0; i < response.data.length; i++) {
+            this.broadcastContent.push(response.data[i].ntitle);
+          }
+        })
+        .catch(err => {
+          console.log("服务器异常" + err);
+        });
+    },
+    //请求秒杀数据
+    getSipkeInfo(num) {
+      this.$axios({
+        method: "get",
+        url: "http://192.168.0.111:8080/sekil/" + num,
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      })
+        .then(response => {
+          console.log(response.data);
+          this.spikeCourse[num] = response.data;
+          //添加每个课程的请购状态
+          this.spikeCourse[num].map(item => {
+            this.$set(item, "status", "即将开抢");
+          });
+        })
+        .catch(err => {
+          console.log("服务器异常" + err);
+        });
+    },
+    //获取课程推荐
+    getRecommendCourse() {
+      this.$axios({
+        methods: "get",
+        url: "http://192.168.0.111:8080/gethot"
+      })
+        .then(response => {
+          console.log(response.data);
+          // this.recommedCourse = response.data;
+        })
+        .catch(err => {
+          console.log("服务器异常" + err);
+        });
+    },
+    //获取实战课程
+    getPracticeScourse() {
+      this.$axios({
+        methods: "get",
+        url: "http://192.168.0.111:8080/getshi"
+      })
+        .then(response => {
+          console.log(response.data);
+          // this.practiceScourse = response.data;
+        })
+        .catch(err => {
+          console.log("服务器异常" + err);
+        });
     }
   },
   computed: {

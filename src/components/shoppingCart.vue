@@ -1,3 +1,5 @@
+<!-- 购物车组件 -->
+
 <template>
   <div class="shopping-cart">
     <div class="shopping-cart-head">
@@ -85,6 +87,9 @@ export default {
       ]
     };
   },
+  created(){
+    this.getShopCart()
+  },
   mounted: function() {
     var that = this;
     that.course.map(function(item) {
@@ -99,13 +104,13 @@ export default {
       that.count = 0;
       i.select = !i.select;
       that.course.forEach(item => {
-        if(item.select === true){
+        if (item.select === true) {
           that.count++;
         }
-      })
-      if(that.count == that.course.length){
+      });
+      if (that.count == that.course.length) {
         that.allSelect = true;
-      }else{
+      } else {
         that.allSelect = false;
       }
     },
@@ -126,15 +131,29 @@ export default {
     confirmDeteCourse() {
       this.course.splice(this.n, 1);
       this.detePopup = false;
+    },
+    //请求购物车数据
+    getShopCart() {
+      this.$axios({
+        methods: "get",
+        url: "http://192.168.0.107:8080/user/findViCourses",
+        params: {
+          uid: 1
+        }
+      })
+        .then(response => {
+          console.log(response.data);
+          // this.practiceScourse = response.data;
+        })
+        .catch(err => {
+          console.log("服务器异常" + err);
+        });
     }
   }
 };
 </script>
 
 <style lang="scss">
-// .shopping-cart {
-//   position: relative;
-// }
 .Pop-ups {
   width: 70%;
   height: 3.140097rem;

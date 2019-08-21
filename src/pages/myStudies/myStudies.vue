@@ -10,7 +10,7 @@
         <!-- 中间部分 -->
         <div class="study-content">
           <div class="study-tab" :class="{navBarWrap: navBarFixed}">
-            <!-- <router-link
+            <router-link
               tag="span"
               :class="{tab_active: '/myStudies/myCourses'===$route.path}"
               to="/myStudies/myCourses"
@@ -19,16 +19,16 @@
               tag="span"
               :class="{tab_active: '/myStudies/learningRecord'===$route.path}"
               to="/myStudies/learningRecord"
-            >最近学习</router-link>-->
-
+            >最近学习</router-link>
+<!-- 
             <span :class="{tab_active: this.flagCourses == 1}" @click="changeCoursesTab(1)">我的课程</span>
-            <span :class="{tab_active: this.flagCourses == 2}" @click="changeCoursesTab(2)">最近学习</span>
+            <span :class="{tab_active: this.flagCourses == 2}" @click="changeCoursesTab(2)">最近学习</span> -->
           </div>
           <!-- 子组件 -->
           <template>
-            <!-- <router-view :navBarFixedChild="navBarFixed"></router-view> -->
-            <child1 v-show="this.flagCourses == 1" :childMsg="navBarFixed"></child1>
-            <child2 v-show="this.flagCourses == 2" :childMsg="navBarFixed"></child2>
+            <router-view :navBarFixedChild="navBarFixed"></router-view>
+            <!-- <child1 v-show="this.flagCourses == 1" :childMsg="navBarFixed"></child1>
+            <child2 v-show="this.flagCourses == 2" :childMsg="navBarFixed"></child2> -->
           </template>
         </div>
       </div>
@@ -40,21 +40,21 @@
 
 <script>
 import footerGuide from "../../components/footerGuide";
-//两个子组件
-import child1 from "../myStudies/myCourses";
-import child2 from "../myStudies/learningRecord";
+// //两个子组件
+// import child1 from "../myStudies/myCourses";
+// import child2 from "../myStudies/learningRecord";
 
 export default {
   data() {
     return {
       navBarFixed: false,
-      flagCourses: 1
+      // flagCourses: 1
     };
   },
   components: {
     footerGuide,
-    child1,
-    child2
+    // child1,
+    // child2
   },
   methods: {
     watchscroll(e) {
@@ -70,8 +70,24 @@ export default {
         this.navBarFixed = false;
       }
     },
-    changeCoursesTab(i) {
-      this.flagCourses = i;
+    // changeCoursesTab(i) {
+    //   this.flagCourses = i;
+    // },
+    getRecentlyStudied() {
+      this.$axios({
+        methods: "get",
+        url: "http://192.168.0.107:8080/user/findViCourses",
+        params: {
+          uid: 1
+        }
+      })
+        .then(response => {
+          console.log("哈哈" + response.data);
+          // this.practiceScourse = response.data;
+        })
+        .catch(err => {
+          console.log("服务器异常" + err);
+        });
     }
   }
   // mounted() {

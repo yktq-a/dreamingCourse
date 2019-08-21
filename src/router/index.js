@@ -25,6 +25,10 @@ import announcementDetails from '../components/announcementDetails'
 import spikeCourseSystems from '../components/spikeCourseSystems'
 //课程推荐
 import courseRecommendation from '../components/courseRecommendation'
+
+import myCourses from '../pages/myStudies/myCourses'
+import learningRecord from '../pages/myStudies/learningRecord'
+
 Vue.use(Router)
 
 export default new Router({
@@ -64,20 +68,20 @@ export default new Router({
     {
       path: '/myStudies',
       component: myStudies,
-      // children: [//配置 我的学习 页面的子路由
-      //   {
-      //     path: '/',
-      //     component: myCourses,
-      //   },
-      //   {
-      //     path: 'myCourses',
-      //     component: myCourses,
-      //   },
-      //   {
-      //     path: 'learningRecord',
-      //     component: learningRecord,
-      //   }
-      // ]
+      children: [//配置 我的学习 页面的子路由
+        {
+          path: '/',
+          component: myCourses,
+        },
+        {
+          path: 'myCourses',
+          component: myCourses,
+        },
+        {
+          path: 'learningRecord',
+          component: learningRecord,
+        }
+      ]
     },
     {
       path: '/admin/shoppingCart',

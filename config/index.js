@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     // proxyTable: {
     //   '/api': {
-    //     target: 'http://yaobin.xyz/', //对应请求的接口
+    //     target: 'http://192.168.0.111:8080/', //对应请求的接口
     //     changeOrigin: true,
     //     // ws: true,
     //     pathRewrite: {
