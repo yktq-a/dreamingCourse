@@ -37,7 +37,7 @@
             </div>
             <p class="subtotal">
               小计:
-              <span>{{ }}</span>元
+              <span>{{ item.select == true ? retainDecimals(item.price) : retainDecimals(0) }}</span>元
             </p>
           </li>
         </ul>
@@ -51,9 +51,9 @@
         </div>
         <div class="total-price">
           合计:
-          <span>{{ totalPrice }}</span>
+          <span>{{ retainDecimals(totalPrice) }}</span>
         </div>
-        <div class="settlement">去结算</div>
+        <div class="settlement" @click="settlement(2)">去结算</div>
       </div>
     </div>
   </div>
@@ -66,29 +66,29 @@ export default {
       detePopup: false,
       n: 0,
       count: 0, //当前选中的个数
-      totalPrice: "666",
+      totalPrice: 0.0, //选中的总价
       allSelect: false, //全选按钮状态
       cid: "", //要删除的课程id
       uid: "", //用户的id
       settlementCourse: [], //要结算的课程集合
-      course: [
-        {
-          price: "39.9",
-          cover: "../../../static/imgs/course1.jpg",
-          titel: "Angular 2 劲爆来袭 打造你的今日头条111"
-        },
-        {
-          price: "39.9",
-          cover: "../../../static/imgs/course1.jpg",
-          titel: "Angular 2 劲爆来袭 打造你的今日头条222"
-        },
-        {
-          price: "39.9",
-          cover: "../../../static/imgs/course1.jpg",
-          titel: "Angular 2 劲爆来袭 打造你的今日头条333"
-        }
-      ]
-      // course: []
+      // course: [
+      //   {
+      //     price: "39.9",
+      //     cover: "../../../static/imgs/course1.jpg",
+      //     titel: "Angular 2 劲爆来袭 打造你的今日头条111"
+      //   },
+      //   {
+      //     price: "39.9",
+      //     cover: "../../../static/imgs/course1.jpg",
+      //     titel: "Angular 2 劲爆来袭 打造你的今日头条222"
+      //   },
+      //   {
+      //     price: "39.9",
+      //     cover: "../../../static/imgs/course1.jpg",
+      //     titel: "Angular 2 劲爆来袭 打造你的今日头条333"
+      //   }
+      // ]
+      course: []
     };
   },
   created() {
@@ -102,14 +102,31 @@ export default {
     // var that = this;
   },
   methods: {
+    //格式化数字
+    retainDecimals(value) {
+      var value = Math.round(parseFloat(value) * 100) / 100;
+      var xsd = value.toString().split(".");
+      if (xsd.length == 1) {
+        value = value.toString() + ".00";
+        return value;
+      }
+      if (xsd.length > 1) {
+        if (xsd[1].length < 2) {
+          value = value.toString() + "0";
+        }
+        return value;
+      }
+    },
     changeChoice(i) {
       //单个选中
       //每一次点击计数清零 否则会累积
       this.count = 0;
+      this.totalPrice = 0.0;
       this.settlementCourse = [];
       i.select = !i.select;
       this.course.forEach(item => {
         if (item.select === true) {
+          this.totalPrice += parseFloat(item.price);
           this.count++;
           this.settlementCourse.push(item.courseId);
         }
@@ -122,6 +139,7 @@ export default {
     },
     changeSelectAll() {
       //切换全选
+      this.totalPrice = 0.0;
       this.settlementCourse = [];
       this.allSelect = !this.allSelect;
       //循环改变购物车数据每一项的选中状态
@@ -132,6 +150,7 @@ export default {
       this.course.forEach(item => {
         if (item.select === true) {
           this.settlementCourse.push(item.courseId);
+          this.totalPrice += parseFloat(item.price);
         }
       });
     },
@@ -156,7 +175,7 @@ export default {
       this.$axios(
         {
           method: "post",
-          url: "http://192.168.0.101:8080/updatestatus",
+          url: "http://192.168.0.106:8080/updatestatus",
           data: postdata
         },
         {
@@ -174,7 +193,7 @@ export default {
     getShopCart() {
       this.$axios({
         method: "get",
-        url: "http://192.168.0.101:8080/findcart",
+        url: "http://192.168.0.106:8080/findcart",
         params: {
           uid: 2
         }
@@ -190,15 +209,24 @@ export default {
       console.log(this.course);
     },
     //购物车结算
-    settlement() {
-      let postsettlement = this.$qs.stringify({
-        uid: this.uid
-      });
+    settlement(uid) {
+      let postsettlement = this.$qs.stringify(
+        {
+          uid: uid,
+          cid: this.settlementCourse
+        },
+        {
+          //这他妈是一个坑，我太难了
+          indices: false
+        }
+      );
+      console.log(this.settlementCourse);
+      console.log(postsettlement);
       this.$axios(
         {
           method: "post",
-          url: "http://192.168.0.101:8080/updatestatus",
-          data: postdata
+          url: "http://192.168.0.106:8080/insertOrder",
+          data: postsettlement
         },
         {
           headers: { "Content-Type": "application/json" }
@@ -206,6 +234,11 @@ export default {
       )
         .then(response => {
           console.log(response.data);
+          if(response.data === 2){
+            this.$router.push({
+              path:"/confirmBuy"
+            })
+          } 
         })
         .catch(err => {
           console.log("服务器异常" + err);

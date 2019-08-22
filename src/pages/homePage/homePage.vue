@@ -65,7 +65,7 @@
           <ol class="clearfix spike-animate" :style="containerStyle">
             <li class="all-spike-course start-ten">
               <ul>
-                <li v-for="(item,index) in actualScourse" :key="index" @click="toSpike">
+                <li v-for="(item,index) in actualScourse" :key="index" @click="toSpike(item.cid)">
                   <img :src="item.img" alt />
                   <div class="spike-course-detailed">
                     <h4>{{item.name}}</h4>
@@ -173,7 +173,7 @@ export default {
           status: "即将开抢",
           content: "限时特惠，即将开抢~",
           startPoint: "10:00",
-          startTime: "2019-08-16 10:00",
+          startTime: "2019-08-22 10:00",
           notStart: false,
           start: false,
           end: false
@@ -183,7 +183,7 @@ export default {
           status: "即将开抢",
           content: "限时特惠，即将开抢~",
           startPoint: "16:00",
-          startTime: "2019-08-16 16:00",
+          startTime: "2019-08-22 16:00",
           notStart: false,
           start: false,
           end: false
@@ -193,7 +193,7 @@ export default {
           status: "即将开抢",
           content: "限时特惠，即将开抢~",
           startPoint: "20:00",
-          startTime: "2019-08-16 20:00",
+          startTime: "2019-08-22 20:00",
           notStart: false,
           start: false,
           end: false
@@ -239,6 +239,7 @@ export default {
       //秒杀课程数据
       actualScourse: [
         {
+          cid: 1,
           name: "Python3入门+进阶课程",
           origin_price: "799",
           price: "199",
@@ -247,6 +248,7 @@ export default {
           detailed: "全面系统Python3入门+进阶课程 零基础学Python 小黑也能听懂"
         },
         {
+          cid: 2,
           name: "Python3入门+进阶课程 小黑也能听懂",
           origin_price: "799",
           price: "299",
@@ -255,6 +257,7 @@ export default {
           detailed: "全面系统Python3入门+进阶课程 零基础学Python 小黑也能听懂"
         },
         {
+          cid: 3,
           name: "Python3入门+进阶课程 小黑也能听懂",
           origin_price: "799",
           price: "399",
@@ -263,6 +266,7 @@ export default {
           detailed: "全面系统Python3入门+进阶课程 零基础学Python 小黑也能听懂"
         },
         {
+          cid: 4,
           name: "Python3入门+进阶课程 小黑也能听懂",
           origin_price: "799",
           price: "499",
@@ -322,9 +326,12 @@ export default {
         path: "/homePage/announcementDetails"
       });
     },
-    toSpike() {
+    toSpike(cid) {
       this.$router.push({
-        path: "/homePage/spikeCourseSystems"
+        path: "/homePage/spikeCourseSystems",
+        query: {
+          cid
+        }
       });
     },
     toMore() {

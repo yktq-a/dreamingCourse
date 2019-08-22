@@ -14,7 +14,7 @@
       <!-- <div class="client-infor">
         <span>长孙静</span>
         <span>18309283552</span>
-      </div> -->
+      </div>-->
       <div class="course-information">
         <p>商品信息</p>
         <div class="course">
@@ -30,15 +30,15 @@
     </div>
     <div id="buy-footer">
       <div class="need-money">
-      <p class="course-money">
+        <p class="course-money">
           订单总价
           <span>¥457</span>
         </p>
         <!-- <p class="course-money">
           需付款
           <span>¥457</span>
-        </p> -->
-    </div>
+        </p>-->
+      </div>
       <!-- <p>实付<span>¥457</span></p> -->
       <div class="submitOrder">
         <span>提交订单</span>
@@ -49,31 +49,33 @@
 </template>
 
 <script>
-import payment from '../../components/payment.vue'
+import payment from "../../components/payment.vue";
 export default {
   data() {
     return {
-      confirmBuy:{}
-    }
+      confirmBuy: {}
+    };
   },
-  components:{
+  components: {
     payment
   },
   created() {
-     this.$axios({
-                method:'get',
-                url:'http://192.168.0.108:8080/order/addOrderDirectly',
-                params:{
-                    uid:4,
-                    courseId:1
-                }
-            }).then(res=>{
-                this.confirmBuy = res.data.data;
-                console.log(res.data.data);
-            }).catch((error)=>{
-                alert(error);
-            });
-  },
+    this.$axios({
+      method: "get",
+      url: "http://192.168.0.108:8080/order/addOrderDirectly",
+      params: {
+        uid: 4,
+        courseId: 1
+      }
+    })
+      .then(res => {
+        this.confirmBuy = res.data.data;
+        console.log(res.data.data);
+      })
+      .catch(error => {
+        alert(error);
+      });
+  }
 };
 </script>
 <style>
@@ -101,7 +103,7 @@ export default {
   font: 0.483092rem "微软雅黑";
 }
 #buyHead .client-infor {
-  padding-left: .241546rem;
+  padding-left: 0.241546rem;
   height: 1.207729rem;
   margin: 0.241546rem 0;
 }
@@ -115,7 +117,7 @@ export default {
   width: 100%;
   position: absolute;
   top: 2.415459rem;
-  bottom: .241546rem;
+  bottom: 0.241546rem;
   overflow: auto;
   padding: 0.241546rem;
 }
@@ -154,12 +156,12 @@ export default {
   bottom: 0;
   height: 2.415459rem;
 }
-#buy-footer .need-money  > .course-money {
-  font-size: .483092rem;
+#buy-footer .need-money > .course-money {
+  font-size: 0.483092rem;
   width: 100%;
   margin-top: 0.241546rem;
   position: relative;
-  padding-bottom: .169082rem;
+  padding-bottom: 0.169082rem;
   border-bottom: 0.096618rem solid #eeeeee;
 }
 #buy-footer .need-money > .course-money > span {
@@ -171,7 +173,7 @@ export default {
 #buy-footer > .submitOrder {
   position: absolute;
   right: 0.241546rem;
-  bottom:0;
+  bottom: 0;
   width: 2.898551rem;
   height: 1.207729rem;
   background-color: #ea6311;

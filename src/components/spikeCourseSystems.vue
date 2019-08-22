@@ -110,12 +110,14 @@ export default {
     return {
       // src:"../../../static/Intermission-Walk-in.ogv",
       //秒杀模块
+      cid: this.$route.query.cid,
       hh: "00",
       mm: "00",
       ss: "00",
       countdownStatus: "",
       spikeButton: "",
       spikeFlag: false,
+      //详情数据
       show: 0,
       current: 0,
       playStatus: "",
@@ -123,7 +125,7 @@ export default {
       vComments: ["详情", "章节", "评价"],
       spikeC: {
         name: "Python3入门+进阶课程",
-        startTime: "2019-08-16 20:00",
+        startTime: "2019-08-22 21:00",
         origin_price: "799",
         price: "199",
         limited: 100,
@@ -182,13 +184,25 @@ export default {
     };
   },
   async created() {
-    this.miaoSha();
+    this.Spike();
     this.timeInterval = setInterval(() => {
-      this.miaoSha();
+      this.Spike();
     }, 1000);
   },
   methods: {
-    miaoSha() {
+    //首次请求
+    spike() {
+      this.$axios({
+        method: "get",
+        url: "",
+        params: {
+          cid: this.cid
+        }
+      }).then(res => {
+        
+      });
+    },
+    Spike() {
       var now = Date.now(); //当前服务器时间
       var disStart = now - new Date(this.spikeC.startTime).getTime(); //开始时间和服务器时间之差
       var disEnd = now - (new Date(this.spikeC.startTime).getTime() + 7200000); //结束时间和服务器时间之差
@@ -220,6 +234,8 @@ export default {
         this.spikeFlag = false;
       }
     },
+    //抢购请求
+    panicBuying() {},
     playClick() {
       this.$refs.vo.play();
       this.isPlay = !this.isPlay;
@@ -235,11 +251,6 @@ export default {
       this.$refs.ref.style.left =
         (-index * document.documentElement.clientWidth) / 41.4 + "rem";
     },
-    // goShopping(){
-    //   this.$router.push({
-    //    path:'/shoppingCart'
-    //   });
-    // },
     // goBuy(){
     //   this.$router.push({
     //    path:'/confirmBuy'

@@ -160,6 +160,7 @@ export default {
   z-index: 10;
   span {
     font-size: 0.483092rem;
+    text-align: center;
   }
   span:nth-child(2) {
     width: 80%;

@@ -47,7 +47,7 @@ export default new VueRouter({
     },
     {
       path: '/',
-      redirect: '/homePage'
+      redirect: '/homePage' 
     },
     {
       path: '/courseSystems',
@@ -112,10 +112,6 @@ export default new VueRouter({
       component: courseRecommendation
     },
     {
-      path: '/search',
-      component: search
-    },
-    {
       path: '/myStudies',
       component: myStudies,
       children: [//配置 我的学习 页面的子路由
@@ -137,21 +133,6 @@ export default new VueRouter({
       path: '/admin/shoppingCart',
       component: shoppingCart,
       name: 'shoppingCart'
-    },
-    {
-      path: '/admin/setting',
-      component: setting,
-      name: 'setting'
-    },
-    {
-      path: '/admin/setting/about',
-      component: about,
-      name: 'about'
-    },
-    {
-      path: '/admin/problem',
-      component: problem,
-      name: 'problem',
     },
     {
       path: '/courseSort/sortDetailed',
