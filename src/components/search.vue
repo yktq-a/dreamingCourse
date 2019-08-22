@@ -4,7 +4,13 @@
     <div class="search-head">
       <span @click="$router.back()">&lt;</span>
       <div class="search-bar">
-        <input class="search-input" type="text" placeholder="javascript Web前端" v-model="searchInput" @keyup="showCross" />
+        <input
+          class="search-input"
+          type="text"
+          placeholder="javascript Web前端"
+          v-model="searchInput"
+          @keyup="showCross"
+        />
         <div class="delete-input" v-show="inputFlag" @click="emptyInput">
           <span class="iconfont">&#xe62a;</span>
         </div>
@@ -42,7 +48,7 @@
 
 <script>
 //搜索结果组件
-import searchResults from '../components/searchResults'
+import searchResults from "../components/searchResults";
 
 export default {
   data() {
@@ -52,8 +58,18 @@ export default {
       historyFlag: true,
       searchInput: "",
       searchHistory: ["Java", "HTML&CSS", "Python"],
-      popularSearch: ["JavaScript", "HTML&CSS", "Python","Java", "HTML&CSS", "Python"]
+      popularSearch: [
+        "JavaScript",
+        "HTML&CSS",
+        "Python",
+        "Java",
+        "HTML&CSS",
+        "Python"
+      ]
     };
+  },
+  created() {
+    this.getSeach();
   },
   components: {
     searchResults
@@ -67,7 +83,7 @@ export default {
       }
     },
     emptyInput() {
-      this.searchInput = '';
+      this.searchInput = "";
       this.inputFlag = false;
     },
     toSearch() {
@@ -76,6 +92,22 @@ export default {
     clearHistory() {
       this.historyFlag = false;
       this.searchHistory = [];
+    },
+    getSeach() {
+      this.$axios({
+        methods: "get",
+        url: "http://192.168.1.35:8080/es/search",
+        params: {
+          name: "三国"
+        }
+      })
+        .then(response => {
+          console.log(response.data);
+          // this.practiceScourse = response.data;
+        })
+        .catch(err => {
+          console.log("服务器异常" + err);
+        });
     }
   }
 };
@@ -89,7 +121,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  padding: 0 .241546rem;
+  padding: 0 0.241546rem;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -101,19 +133,19 @@ export default {
 }
 .search-input {
   width: 100%;
-  height: .724638rem;
+  height: 0.724638rem;
   color: #a0a0a0;
-  font-size: .434783rem;
+  font-size: 0.434783rem;
   border: 0;
   border-radius: 0.193237rem;
-  padding-left: .120773rem;
+  padding-left: 0.120773rem;
   background-color: #e0e0e0;
 }
-.search-head>span {
+.search-head > span {
   display: inline-block;
   width: 0.483092rem;
   height: 0.483092rem;
-  font-size: .628019rem;
+  font-size: 0.628019rem;
   font-weight: 600;
   color: #666;
 }
@@ -166,6 +198,6 @@ export default {
   border: 1px solid #8f8c8b;
   border-radius: 0.120773rem;
   margin: 0 0.120773rem;
-  margin-bottom: .241546rem;
+  margin-bottom: 0.241546rem;
 }
 </style>

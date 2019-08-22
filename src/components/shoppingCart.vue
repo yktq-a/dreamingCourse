@@ -29,11 +29,11 @@
               <div class="course-details">
                 <img :src="item.cover" alt />
                 <div class="course-introduction">
-                  <h4>{{ item.titel }}</h4>
+                  <h4>{{ item.courseName }}</h4>
                   <span>￥ {{ item.price }}</span>
                 </div>
               </div>
-              <span class="delete" @click="deteCourse(index)">删除</span>
+              <span class="delete" @click="deteCourse(index,item.userId,item.courseId)">删除</span>
             </div>
             <p class="subtotal">
               小计:
@@ -65,9 +65,12 @@ export default {
     return {
       detePopup: false,
       n: 0,
-      count: 0,
+      count: 0, //当前选中的个数
       totalPrice: "666",
       allSelect: false, //全选按钮状态
+      cid: "", //要删除的课程id
+      uid: "", //用户的id
+      settlementCourse: [], //要结算的课程集合
       course: [
         {
           price: "39.9",
@@ -85,65 +88,124 @@ export default {
           titel: "Angular 2 劲爆来袭 打造你的今日头条333"
         }
       ]
+      // course: []
     };
   },
-  created(){
-    this.getShopCart()
-  },
-  mounted: function() {
+  created() {
+    this.getShopCart();
     var that = this;
-    that.course.map(function(item) {
+    this.course.map(function(item) {
       that.$set(item, "select", false);
     });
+  },
+  mounted: function() {
+    // var that = this;
   },
   methods: {
     changeChoice(i) {
       //单个选中
-      var that = this;
       //每一次点击计数清零 否则会累积
-      that.count = 0;
+      this.count = 0;
+      this.settlementCourse = [];
       i.select = !i.select;
-      that.course.forEach(item => {
+      this.course.forEach(item => {
         if (item.select === true) {
-          that.count++;
+          this.count++;
+          this.settlementCourse.push(item.courseId);
         }
       });
-      if (that.count == that.course.length) {
-        that.allSelect = true;
+      if (this.count == this.course.length) {
+        this.allSelect = true;
       } else {
-        that.allSelect = false;
+        this.allSelect = false;
       }
     },
     changeSelectAll() {
       //切换全选
+      this.settlementCourse = [];
       this.allSelect = !this.allSelect;
-      for (let i = 0; i < this.course.length; ++i) {
+      //循环改变购物车数据每一项的选中状态
+      for (var i = 0; i < this.course.length; ++i) {
         this.course[i].select = this.allSelect;
       }
+      //循环
+      this.course.forEach(item => {
+        if (item.select === true) {
+          this.settlementCourse.push(item.courseId);
+        }
+      });
     },
-    deteCourse(index) {
+    //删除
+    deteCourse(index, uid, cid) {
       this.detePopup = true;
       this.n = index;
+      this.uid = uid;
+      this.cid = cid;
     },
     undeleteCourse() {
       this.detePopup = false;
     },
+    //确认删除
     confirmDeteCourse() {
       this.course.splice(this.n, 1);
       this.detePopup = false;
+      let postdata = this.$qs.stringify({
+        uid: this.uid,
+        cid: this.cid
+      });
+      this.$axios(
+        {
+          method: "post",
+          url: "http://192.168.0.101:8080/updatestatus",
+          data: postdata
+        },
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      )
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(err => {
+          console.log("服务器异常" + err);
+        });
     },
     //请求购物车数据
     getShopCart() {
       this.$axios({
-        methods: "get",
-        url: "http://192.168.0.107:8080/user/findViCourses",
+        method: "get",
+        url: "http://192.168.0.101:8080/findcart",
         params: {
-          uid: 1
+          uid: 2
         }
       })
         .then(response => {
-          console.log(response.data);
+          console.log(response);
+          this.course = response.data;
           // this.practiceScourse = response.data;
+        })
+        .catch(err => {
+          console.log("服务器异常" + err);
+        });
+      console.log(this.course);
+    },
+    //购物车结算
+    settlement() {
+      let postsettlement = this.$qs.stringify({
+        uid: this.uid
+      });
+      this.$axios(
+        {
+          method: "post",
+          url: "http://192.168.0.101:8080/updatestatus",
+          data: postdata
+        },
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      )
+        .then(response => {
+          console.log(response.data);
         })
         .catch(err => {
           console.log("服务器异常" + err);

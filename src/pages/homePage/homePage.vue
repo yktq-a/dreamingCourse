@@ -13,7 +13,7 @@
       <!-- 轮播图 -->
       <mt-swipe :auto="2500">
         <mt-swipe-item v-for="(item,index) in banner" :key="index">
-          <img :src="item" alt />
+          <img :src="item" alt  @click="toCourseDetail"/>
         </mt-swipe-item>
       </mt-swipe>
 
@@ -123,7 +123,7 @@
         </div>
         <div class="recommed-course">
           <ul>
-            <li v-for="(item,index) in recommedCourse" :key="index">
+            <li v-for="(item,index) in recommedCourse" :key="index" @click="toCourseDetail">
               <img :src="item.img" alt />
               <h4>{{item.name}}</h4>
               <span>{{item.detailed}}</span>
@@ -137,7 +137,7 @@
         <div class="actual-combat-title">实战推荐</div>
         <div class="actual-combat-course">
           <ul>
-            <li v-for="(item,index) in actualScourse" :key="index">
+            <li v-for="(item,index) in actualScourse" :key="index" @click="toCourseDetail">
               <img :src="item.img" alt />
               <div class="actual-combat-course-detailed">
                 <h4>{{item.name}}</h4>
@@ -307,6 +307,11 @@ export default {
     }
   },
   methods: {
+    toCourseDetail(){
+      this.$router.push({
+        path: "/courseSystems"
+      });
+    },
     toSearch() {
       this.$router.push({
         path: "/search"
@@ -440,7 +445,7 @@ export default {
     //获取课程推荐
     getRecommendCourse() {
       this.$axios({
-        methods: "get",
+        method: "get",
         url: "http://192.168.0.111:8080/gethot"
       })
         .then(response => {
@@ -454,7 +459,7 @@ export default {
     //获取实战课程
     getPracticeScourse() {
       this.$axios({
-        methods: "get",
+        method: "get",
         url: "http://192.168.0.111:8080/getshi"
       })
         .then(response => {

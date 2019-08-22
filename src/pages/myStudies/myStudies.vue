@@ -12,23 +12,23 @@
           <div class="study-tab" :class="{navBarWrap: navBarFixed}">
             <router-link
               tag="span"
-              :class="{tab_active: '/myStudies/myCourses'===$route.path}"
+              :class="{tab_active:$route.path === '/myStudies' || $route.path === '/myStudies/myCourses'}"
               to="/myStudies/myCourses"
             >我的课程</router-link>
             <router-link
               tag="span"
-              :class="{tab_active: '/myStudies/learningRecord'===$route.path}"
+              :class="{tab_active: '/myStudies/learningRecord'=== $route.path}"
               to="/myStudies/learningRecord"
             >最近学习</router-link>
-<!-- 
+            <!-- 
             <span :class="{tab_active: this.flagCourses == 1}" @click="changeCoursesTab(1)">我的课程</span>
-            <span :class="{tab_active: this.flagCourses == 2}" @click="changeCoursesTab(2)">最近学习</span> -->
+            <span :class="{tab_active: this.flagCourses == 2}" @click="changeCoursesTab(2)">最近学习</span>-->
           </div>
           <!-- 子组件 -->
           <template>
             <router-view :navBarFixedChild="navBarFixed"></router-view>
             <!-- <child1 v-show="this.flagCourses == 1" :childMsg="navBarFixed"></child1>
-            <child2 v-show="this.flagCourses == 2" :childMsg="navBarFixed"></child2> -->
+            <child2 v-show="this.flagCourses == 2" :childMsg="navBarFixed"></child2>-->
           </template>
         </div>
       </div>
@@ -47,12 +47,12 @@ import footerGuide from "../../components/footerGuide";
 export default {
   data() {
     return {
-      navBarFixed: false,
+      navBarFixed: false
       // flagCourses: 1
     };
   },
   components: {
-    footerGuide,
+    footerGuide
     // child1,
     // child2
   },
@@ -60,11 +60,7 @@ export default {
     watchscroll(e) {
       //滚动的像素+容器的高度>可滚动的总高度-100像素
       //    console.log(e.srcElement.scrollTop);
-      if (
-        e.srcElement.scrollTop > 200
-        // e.srcElement.scrollTop + e.srcElement.offsetHeight >
-        // e.srcElement.scrollHeight - 100
-      ) {
+      if (e.srcElement.scrollTop > 200) {
         this.navBarFixed = true;
       } else {
         this.navBarFixed = false;
@@ -75,7 +71,7 @@ export default {
     // },
     getRecentlyStudied() {
       this.$axios({
-        methods: "get",
+        method: "get",
         url: "http://192.168.0.107:8080/user/findViCourses",
         params: {
           uid: 1

@@ -1,5 +1,4 @@
 'use strict'
 module.exports = {
-  NODE_ENV: '"production"',//生产环境
-  // API_HOST:'"http://yaobin.xyz/"'
+  NODE_ENV: '"production"'
 }

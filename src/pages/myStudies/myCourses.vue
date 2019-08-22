@@ -106,7 +106,7 @@ export default {
   methods: {
     getMyScourse() {
       this.$axios({
-        methods: "get",
+        method: "get",
         url: "http://192.168.0.107:8080/user/findViCourses",
         params: {
           uid: 1

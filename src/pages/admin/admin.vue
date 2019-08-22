@@ -2,14 +2,14 @@
   <div class="mine">
     <!-- mine-head部分 -->
     <div class="mine-head">
-      <div class="mine-avatar">
+      <div class="mine-avatar" @click="goLogin">
         <img src="../../../static/imgs/未登录头像.png" alt />
       </div>
       <span>点击登录</span>
     </div>
     <!-- buy-option部分 -->
     <div class="buy-option">
-      <div>
+      <div @click="goOrder">
         <p>
           <span class="iconfont">&#xe603;</span>
         </p>
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import footerGuide from "../../components/footerGuide"
+import footerGuide from "../../components/footerGuide";
 export default {
   data() {
     return {
@@ -67,16 +67,26 @@ export default {
         path: "/admin/setting"
       });
     },
-    toProblem(){
+    toProblem() {
       this.$router.push({
-        path: '/admin/problem'
+        path: "/admin/problem"
+      });
+    },
+    goLogin() {
+      this.$router.push({
+        path: "/login"
+      });
+    },
+    goOrder() {
+      this.$router.push({
+        path: "/order"
       });
     }
   }
 };
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 .mine-head {
   margin-top: 0.966184rem;
   display: flex;

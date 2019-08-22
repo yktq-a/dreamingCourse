@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <div id="footerGuide">
     <div @click="goTo('/homePage')">
       <p class="icon iconfont" :class="{on:'/homePage'===$route.path}">&#xe60b;</p>
       <p :class="{on:'/homePage'===$route.path}">首页</p>
@@ -16,7 +16,7 @@
       <p class="icon iconfont" :class="{on:'/admin'===$route.path}">&#xe605;</p>
       <p :class="{on:'/admin'===$route.path}">账号</p>
     </div>
-  </footer>
+  </div>
 </template>
 <script>
 export default {
@@ -27,31 +27,28 @@ export default {
   }
 };
 </script>
-
-
 <style>
-footer {
+#footerGuide {
   width: 100%;
   height: 1.570048rem;
   position: fixed;
   bottom: 0;
 }
-footer div {
+#footerGuide div {
   width: 25%;
   height: 100%;
   float: left;
 }
-footer div .icon {
+#footerGuide div .icon {
   font-size: 1.086957rem;
   color: #bfbfbf;
   text-align: center;
 }
-footer div p:nth-child(2) {
+#footerGuide div p:nth-child(2) {
   font-size: 0.434783rem;
   text-align: center;
 }
-footer div .on {
+#footerGuide div .on {
   color: #6ac3c5;
 }
-
 </style>
