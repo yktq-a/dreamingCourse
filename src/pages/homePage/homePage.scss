@@ -40,13 +40,12 @@
   top: 1.449275rem;
   bottom: 1.570048rem;
   overflow: auto;
+  text-align: center;
 }
 
 .mint-swipe {
   height: 3.623188rem;
-
   .mint-swipe-item {
-    padding-left: .362319rem;
     // width: 100%;
     /* height: 3.623188rem; */
     margin: 0.241546rem auto;
@@ -114,7 +113,7 @@
   background-color: #d4e7f3;
 }
 .period  li {
-  width: 26%;
+  width: 30%;
   height: .724638rem;
   background-color: #eee;
   color: #666;
@@ -202,6 +201,8 @@
 .panic-buying {
   width: 1.690821rem;
   height: .603865rem;
+  color: #fff;
+  line-height: .603865rem;
   background-color: #f67b25;
   border-radius: .120773rem;
   position: absolute;

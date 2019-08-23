@@ -7,14 +7,20 @@
       <span></span>
     </div>
     <div class="about-content">
-      <img src="../../static/imgs/logo.png" alt="">
+      <img src="../../static/imgs/logo.png" alt />
       <span>©版权归筑梦云课堂开发团队独家所有</span>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      list: []
+    };
+  },
+};
 </script>
 
 <style lang="scss">
@@ -39,7 +45,7 @@ export default {};
     position: absolute;
     height: 70%;
     top: 1.207729rem;
-    margin: 1.932367rem 0; 
+    margin: 1.932367rem 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -48,7 +54,7 @@ export default {};
       width: 6.280193rem;
     }
     span {
-      font-size: .338164rem;
+      font-size: 0.338164rem;
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="my-courses" :class="{coursesMarginTop: childMsg}">
+  <div class="my-courses" :class="{coursesMarginTop: navBarFixed}">
     <ul>
       <li class="courses-lists" v-for="(item,index) in myCourses" :key="index">
         <img :src="item.img" alt />
@@ -99,10 +99,28 @@ export default {
       ]
     };
   },
-  props: {
-    childMsg:false,
-    required: true,
+  props: ["navBarFixed"],
+  created() {
+    this.getMyScourse();
   },
+  methods: {
+    getMyScourse() {
+      this.$axios({
+        method: "get",
+        url: "http://192.168.0.107:8080/user/findViCourses",
+        params: {
+          uid: 1
+        }
+      })
+        .then(response => {
+          console.log(response.data);
+          // this.practiceScourse = response.data;
+        })
+        .catch(err => {
+          console.log("服务器异常" + err);
+        });
+    }
+  }
 };
 </script>
 

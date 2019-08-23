@@ -16,7 +16,7 @@
     </div>
     <div id="orderOutline" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend">
       <ul ref="order" class="clearfix">
-        <li id="allOrder">
+        <li id="allOrder" v-for="(allOrder, index) in allOrders" :key="index">
           <div class="courseDetails">
             <div class="v-title">
               <span>前端权威课程</span>
@@ -55,7 +55,28 @@
             </div>
           </div>
         </li>
-        <li id="noPayment">给i还得看据洛杉矶发</li>
+        <li id="noPayment">
+          <div><div class="courseDetails">
+            <div class="v-title">
+              <span>前端权威课程</span>
+              <span>等待买家付款</span>
+            </div>
+            <div class="courseImage clearfix">
+              <div @touchstart="goDetails">
+                <img src alt />
+              </div>
+              <span class="money">¥143</span>
+            </div>
+            <div class="option clearfix">
+              <div class="cancelOrder">
+                <span>取消订单</span>
+              </div>
+              <div class="payment" @touchstart="v_payment">
+                <span>立即付款</span>
+              </div>
+            </div>
+          </div></div>
+          </li>
         <li id="noComment">
           <div class="courseDetails" v-for="(noComment, index) in noComments" :key="index">
             <div class="v-title">
@@ -90,6 +111,7 @@ export default {
       orders: ["全部", "待付款", "待评价"],
       allOrders: [
         {
+          img:'',
           name: "前端权威课程",
           price: "456",
           src:
@@ -98,19 +120,29 @@ export default {
       ],
       noComments: [
         {
+          img:'',
           name: "前端权威课程",
           src:
             "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1329598405,2432599223&fm=26&gp=0.jpg",
           price: "145"
         }
-      ]
+      ],
+      allOrders1:{}
     };
   },
   created() {
     this.$axios({
-      method:"get",
-
-    })
+                method:'get',
+                url:'http://192.168.0.103:8080/order/findOrdersById',
+                params:{
+                    UserId:3
+                }
+            }).then(res=>{
+                this.allOrders1 = res.data.data;
+                 console.log(this.allOrders1);
+            }).catch((error)=>{
+                console.log(error);
+            });
   },
   methods: {
     v_payment(){

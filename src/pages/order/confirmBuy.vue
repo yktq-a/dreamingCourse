@@ -17,13 +17,13 @@
       </div> -->
       <div class="course-information">
         <p>商品信息</p>
-        <div class="course">
+        <div class="course" v-for="(confirmBuy, index) in confirmBuys" :key="index">
           <div class="course-img">
             <img src alt />
           </div>
           <div class="course-price">
-            <p>几个居然是个合肥见附件二五六结果立法机关</p>
-            <p>¥</p>
+            <p>{{confirmBuy.detail}}</p>
+            <p>¥{{confirmBuy.price}}</p>
           </div>
         </div>
       </div>
@@ -51,9 +51,45 @@
 <script>
 import payment from '../../components/payment.vue'
 export default {
+  data() {
+    return {
+      confirmBuys:[
+        {
+          src:'',
+        detail:'几个居然是个合肥见附件二五六结果立法机关',
+        price:11
+        },
+        {
+          src:'',
+        detail:'几个居然是个合肥见附件二五六结果立法机关',
+        price:11
+        },
+        {
+          src:'',
+        detail:'几个居然是个合肥见附件二五六结果立法机关',
+        price:11
+        }
+      ]
+    }
+  },
   components:{
     payment
-  }
+  },
+  created() {
+     this.$axios({
+                method:'get',
+                url:'http://192.168.0.108:8080/order/addOrderDirectly',
+                params:{
+                    uid:4,
+                    courseId:1
+                }
+            }).then(res=>{
+                this.confirmBuy = res.data.data;
+                console.log(res.data.data);
+            }).catch((error)=>{
+                console.log(error);
+            });
+  },
 };
 </script>
 <style>

@@ -84,6 +84,9 @@ export default {
 .setting-information span {
   font-size: 0.434783rem;
 }
+.setting-lists {
+  text-align: center;
+}
 .setting-lists ul {
   margin: 0.724638rem auto;
   width: 85%;

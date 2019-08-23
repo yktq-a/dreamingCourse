@@ -1,23 +1,20 @@
 <template>
   <div>
     <div class="up">
-      <button @click="$router.go(-2)">X</button>
-      <button @click="load">登录</button>
+      <button @click="$router.back()">X</button>
+      <button @click="register">注册</button>
     </div>
-    <p>注册</p>
+    <p>找回密码</p>
     <div class="input">
-      <input type="text" placeholder="请输入手机号" />
-      <div class="confirm">
-        <input type="text" placeholder="请输入验证码" />
-        <span>获取验证码</span>
+      <div>
+        您的问题为:
+        <span>{{question}}</span>
       </div>
-      <input type="password" placeholder="请输入密码" />
-      <input type="password" placeholder="确认密码" />
-      <button>注册并登录</button>
-    </div>
-    <div class="agree">
-      注册即代表同意
-      <span @click="agree">注册协议</span>
+      <div>
+        请输入答案:
+      </div>
+      <input type="text" v-model="answer" />
+      <button @click="pass">提交</button>
     </div>
   </div>
 </template>
@@ -25,18 +22,47 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      question: "",
+      answer: "",
+      username: "",
+    };
+  },
+  created: function() {
+    this.question = this.$route.query.question
+    this.username = this.$route.query.username
   },
   methods: {
-    load() {
+    register() {
       this.$router.push({
-        path: "/login"
+        path: "/registration"
       });
     },
-    agree(){
-       this.$router.push({
-          path: "/agreement"
-       })
+    pass(){
+      let postdata = this.$qs.stringify({
+        username : this.username,
+        answer: this.answer,
+      });
+      this.$axios(
+        {
+        method: "post",
+        url: "http://192.168.0.115/hello/input",
+        data: postdata
+        }
+      )
+      .then((res)=>{
+        if(res.data=="input"){
+          this.$router.push({
+            path: "/newpassword",
+            query: {
+              username: this.username
+            }
+          });
+        }else{
+          alert("密码错误");
+        }
+      })
+      
     }
   }
 };
@@ -82,39 +108,38 @@ div p {
   font-family: 微软雅黑;
   margin-top: 1.086957rem;
   margin-bottom: 0.966184rem;
-  letter-spacing: 0.362319rem;
 }
 div .input {
   width: 100%;
-  height: 6.280193rem;
+  height: 4.830918rem;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
 }
+div .input div {
+  display: block;
+  width: 7.729469rem;
+  height: 0.869565rem;
+  line-height: 0.869565rem;
+  border: none;
+  padding-left: 0.483092rem;
+  font-size: 0.434783rem;
+}
 div .input input {
   display: block;
   width: 7.729469rem;
   height: 0.869565rem;
+  line-height: 0.869565rem;
   border: none;
   border-radius: 0.362319rem;
   padding-left: 0.483092rem;
-  padding-right: 0.483092rem;
   background-color: #e5e5e5;
   font-size: 0.434783rem;
 }
-div .input .confirm {
-  width: 7.729469rem;
-  height: 0.869565rem;
-  position: relative;
-}
-div .input .confirm span {
-  height: 0.386473rem;
-  position: absolute;
-  right: 0.483092rem;
-  line-height: 0.386473rem;
-  top: 0.241546rem;
-  border-left: 1px black solid;
+div .input div span{
+  font-size: 0.434783rem;
+  line-height: 0.869565rem;
 }
 div .input button {
   display: block;
@@ -122,14 +147,7 @@ div .input button {
   height: 1.086957rem;
   background-color: #448aca;
   color: white;
-  font-size: 0.57971rem;
+  font-size: 0.724638rem;
   border: none;
-}
-div .agree {
-  text-align: center;
-  margin-top: 0.483092rem;
-}
-div .agree span {
-  color: #448aca;
 }
 </style>

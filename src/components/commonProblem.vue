@@ -32,7 +32,7 @@ export default {
       problemLists: [
         {
           name: "课程有效期是多久？",
-          answer: 
+          answer:
             "课程有效期根据课程的不同而不同，一般的课程都为永久有效。请您在购买前仔细确认课程有效期，以免给您的学习带来不必要的麻烦。",
           problem: false,
         },

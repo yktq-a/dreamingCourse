@@ -1,3 +1,5 @@
+<!-- 购物车组件 -->
+
 <template>
   <div class="shopping-cart">
     <div class="shopping-cart-head">
@@ -5,44 +7,54 @@
       <span>我的购物车</span>
       <span></span>
     </div>
-    <div class="total">共{{ this.course.length }}门课程</div>
-
-    <div class="shopping-lists">
-      <ul>
-        <li v-for="(item, index) in course" :key="index">
-          <div class="lists-top">
-            <div class="selection-box" @click="changeChoice(item)">
-              <span v-show="!item.select" class="multiple-unselected iconfont">&#xe620;</span>
-              <span v-show="item.select" class="multiple-selected iconfont">&#xe60d;</span>
-            </div>
-            <div class="course-details">
-              <img :src="item.cover" alt />
-              <div class="course-introduction">
-                <h4>{{ item.titel }}</h4>
-                <span>￥ {{ item.price }}</span>
-              </div>
-            </div>
-            <span class="delete">删除</span>
-          </div>
-          <p class="subtotal">
-            小计:
-            <span>{{ }}</span>元
-          </p>
-        </li>
-      </ul>
+    <!-- 购物车删除弹窗 -->
+    <div class="Pop-ups" v-show="detePopup">
+      <span>确定要将该课程移出购物车？</span>
+      <div>
+        <span @click="confirmDeteCourse">确认</span>
+        <span @click="undeleteCourse">取消</span>
+      </div>
     </div>
+    <div class="shopping-content" :class="{shopping_content_active:detePopup}">
+      <div class="total">共{{ this.course.length }}门课程</div>
 
-    <!-- 底部合计模块 -->
-    <div class="footer-settlement">
-      <div class="selection-box" @click="changeSelectAll">
-        <span v-show="!allSelect" class="multiple-unselected iconfont">&#xe620;</span>
-        <span v-show="allSelect" class="multiple-selected iconfont">&#xe60d;</span>
+      <div class="shopping-lists">
+        <ul>
+          <li v-for="(item, index) in course" :key="index">
+            <div class="lists-top">
+              <div class="selection-box" @click="changeChoice(item)">
+                <span v-show="!item.select" class="multiple-unselected iconfont">&#xe620;</span>
+                <span v-show="item.select" class="multiple-selected iconfont">&#xe60d;</span>
+              </div>
+              <div class="course-details">
+                <img :src="item.cover" alt />
+                <div class="course-introduction">
+                  <h4>{{ item.courseName }}</h4>
+                  <span>￥ {{ item.price }}</span>
+                </div>
+              </div>
+              <span class="delete" @click="deteCourse(index,item.userId,item.courseId)">删除</span>
+            </div>
+            <p class="subtotal">
+              小计:
+              <span>{{ }}</span>元
+            </p>
+          </li>
+        </ul>
       </div>
-      <div class="total-price">
-        合计:
-        <span>{{ totalPrice }}</span>
+
+      <!-- 底部合计模块 -->
+      <div class="footer-settlement" :class="{footer_settlement_active:detePopup}">
+        <div class="selection-box" @click="changeSelectAll">
+          <span v-show="!allSelect" class="multiple-unselected iconfont">&#xe620;</span>
+          <span v-show="allSelect" class="multiple-selected iconfont">&#xe60d;</span>
+        </div>
+        <div class="total-price">
+          合计:
+          <span>{{ totalPrice }}</span>
+        </div>
+        <div class="settlement">去结算</div>
       </div>
-      <div class="settlement" @click="gopayment">去结算</div>
     </div>
   </div>
 </template>
@@ -51,55 +63,201 @@
 export default {
   data() {
     return {
+      detePopup: false,
+      n: 0,
+      count: 0, //当前选中的个数
       totalPrice: "666",
       allSelect: false, //全选按钮状态
+      cid: "", //要删除的课程id
+      uid: "", //用户的id
+      settlementCourse: [], //要结算的课程集合
       course: [
         {
           price: "39.9",
           cover: "../../../static/imgs/course1.jpg",
-          titel: "Angular 2 劲爆来袭 打造你的今日头条"
+          titel: "Angular 2 劲爆来袭 打造你的今日头条111"
         },
         {
           price: "39.9",
           cover: "../../../static/imgs/course1.jpg",
-          titel: "Angular 2 劲爆来袭 打造你的今日头条"
+          titel: "Angular 2 劲爆来袭 打造你的今日头条222"
         },
         {
           price: "39.9",
           cover: "../../../static/imgs/course1.jpg",
-          titel: "Angular 2 劲爆来袭 打造你的今日头条"
+          titel: "Angular 2 劲爆来袭 打造你的今日头条333"
         }
       ]
+      // course: []
     };
   },
-  mounted: function() {
+  created() {
+    this.getShopCart();
     var that = this;
-    that.course.map(function(item) {
+    this.course.map(function(item) {
       that.$set(item, "select", false);
     });
   },
+  mounted: function() {
+    // var that = this;
+  },
   methods: {
-    gopayment(){
-      this.$router.push({
-        path:'/confirmBuy'
-      });
-    },
     changeChoice(i) {
       //单个选中
+      //每一次点击计数清零 否则会累积
+      this.count = 0;
+      this.settlementCourse = [];
       i.select = !i.select;
+      this.course.forEach(item => {
+        if (item.select === true) {
+          this.count++;
+          this.settlementCourse.push(item.courseId);
+        }
+      });
+      if (this.count == this.course.length) {
+        this.allSelect = true;
+      } else {
+        this.allSelect = false;
+      }
     },
     changeSelectAll() {
       //切换全选
+      this.settlementCourse = [];
       this.allSelect = !this.allSelect;
-      for (let i = 0; i < this.course.length; ++i) {
+      //循环改变购物车数据每一项的选中状态
+      for (var i = 0; i < this.course.length; ++i) {
         this.course[i].select = this.allSelect;
       }
+      //循环
+      this.course.forEach(item => {
+        if (item.select === true) {
+          this.settlementCourse.push(item.courseId);
+        }
+      });
+    },
+    //删除
+    deteCourse(index, uid, cid) {
+      this.detePopup = true;
+      this.n = index;
+      this.uid = uid;
+      this.cid = cid;
+    },
+    undeleteCourse() {
+      this.detePopup = false;
+    },
+    //确认删除
+    confirmDeteCourse() {
+      this.course.splice(this.n, 1);
+      this.detePopup = false;
+      let postdata = this.$qs.stringify({
+        uid: this.uid,
+        cid: this.cid
+      });
+      this.$axios(
+        {
+          method: "post",
+          url: "http://192.168.0.101:8080/updatestatus",
+          data: postdata
+        },
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      )
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(err => {
+          console.log("服务器异常" + err);
+        });
+    },
+    //请求购物车数据
+    getShopCart() {
+      this.$axios({
+        method: "get",
+        url: "http://192.168.0.101:8080/findcart",
+        params: {
+          uid: 2
+        }
+      })
+        .then(response => {
+          console.log(response);
+          this.course = response.data;
+          // this.practiceScourse = response.data;
+        })
+        .catch(err => {
+          console.log("服务器异常" + err);
+        });
+      console.log(this.course);
+    },
+    //购物车结算
+    settlement() {
+      let postsettlement = this.$qs.stringify({
+        uid: this.uid
+      });
+      this.$axios(
+        {
+          method: "post",
+          url: "http://192.168.0.101:8080/updatestatus",
+          data: postdata
+        },
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      )
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(err => {
+          console.log("服务器异常" + err);
+        });
     }
   }
 };
 </script>
 
 <style lang="scss">
+.Pop-ups {
+  width: 70%;
+  height: 3.140097rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  > span {
+    background-color: #7da2e7;
+    display: inline-block;
+    width: 100%;
+    height: 1.690821rem;
+    text-align: center;
+    line-height: 1.690821rem;
+    font-size: 0.483092rem;
+    color: #f8264d;
+  }
+  div {
+    background-color: #fff;
+    width: 100%;
+    height: 1.449275rem;
+    span {
+      display: inline-block;
+      width: 48%;
+      height: 1.449275rem;
+      text-align: center;
+      line-height: 1.449275rem;
+      font-size: 0.434783rem;
+    }
+  }
+}
+.shopping_content_active {
+  background-color: #ccc;
+}
+.shopping-cart .shopping-content {
+  width: 100%;
+  position: absolute;
+  top: 1.207729rem;
+  bottom: 1.570048rem;
+  overflow: auto;
+}
 .shopping-cart-head {
   width: 100%;
   height: 1.207729rem;
@@ -130,7 +288,7 @@ export default {
 .shopping-lists {
   width: 100%;
   position: absolute;
-  top: 1.690821rem;
+  top: 0.483092rem;
   bottom: 1.570048rem;
   overflow: auto;
 }
@@ -200,6 +358,9 @@ export default {
   padding-right: 0.483092rem;
   margin-top: 0.241546rem;
   text-align: right;
+}
+.shopping-content .footer_settlement_active {
+  background-color: #ccc;
 }
 .footer-settlement {
   width: 100%;

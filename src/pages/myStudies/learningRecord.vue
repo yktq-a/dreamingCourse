@@ -1,5 +1,5 @@
 <template>
-  <div class="my-courses" :class="{coursesMarginTop: childMsg}">
+  <div class="my-courses" :class="{coursesMarginTop: navBarFixed}">
     <ul>
       <li class="courses-lists" v-for="(item,index) in myCourses" :key="index">
         <img :src="item.img" alt />
@@ -69,10 +69,11 @@ export default {
       ]
     };
   },
-  props: {
-    childMsg: false,
-    required: true
-  }
+  // mounted(){
+  //   this.getRecentlyStudied()
+  // },
+  props: ["navBarFixed"],
+  methods: {}
 };
 </script>
 

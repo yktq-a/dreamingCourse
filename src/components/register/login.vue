@@ -2,17 +2,17 @@
   <div>
     <div class="up">
       <button @click="$router.back()">X</button>
-      <button @click="register('/registration')">注册</button>
+      <button @click="register">注册</button>
     </div>
     <p>账号登录</p>
     <div class="input">
-      <input type="text" placeholder="手机号" />
-      <input type="password" placeholder="密码" />
-      <button>登录</button>
+      <input type="text" placeholder="用户名" v-model="username" />
+      <input type="password" placeholder="密码" v-model="password" />
+      <button @click="enter">登录</button>
     </div>
     <div class="fail">
-      <span>短信验证登录</span>
-      <span>忘记密码</span>
+      <span @click="note">短信验证登录</span>
+      <span @click="forget">忘记密码</span>
     </div>
   </div>
 </template>
@@ -22,16 +22,53 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      username : "",
+      password: "",
+    };
   },
   methods: {
     register() {
       this.$router.push({
         path: "/registration"
       });
+    },
+    forget(){
+      this.$router.push({
+        path: "/inputusername"
+      });
+    },
+    note(){
+      this.$router.push({
+        path: "/notelogin"
+      });
+    },
+    enter(){
+        let postdata = this.$qs.stringify({
+            username:this.username,
+            password:this.password
+        });
+        this.$axios(
+          {
+          method: "post",
+          url: "http://192.168.0.115/hello/denglu",
+          data: postdata
+          }
+        )
+        .then((res)=>{
+          console.log(res.data);
+          if(res.data==true){
+            this.$router.push({
+              path: "/homePage",
+            })
+          }else{
+            alert("密码错误");
+          }
+        })
+      // }
     }
   }
-};
+}
 </script>
 
 <style scoped>

@@ -52,7 +52,7 @@
             <h1>老师介绍</h1>
             <div class="teacher clearfix">
               <div class="headPicturl">
-                <img src="../../static/img/zyl.png" alt />
+                <!-- <img src="../../../static/img/zyl.png" alt /> -->
               </div>
               <div class="teachBrief">
                 <span class="teachName">朱一龙</span>
@@ -123,7 +123,7 @@ export default {
       vComments: ["详情", "章节", "评价"],
       spikeC: {
         name: "Python3入门+进阶课程",
-        startTime: "2019-08-09 10:00",
+        startTime: "2019-08-16 20:00",
         origin_price: "799",
         price: "199",
         limited: 100,

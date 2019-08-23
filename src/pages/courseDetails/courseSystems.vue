@@ -55,7 +55,7 @@
         </li>
         <li id="courseOutline">
           <div v-for="(courseOutline, index) in courseOutlines" :key="index">
-            <h1>
+            <h1 v-show="courseOutline.node==1">
             第{{courseOutline.chpapter}}章</h1>
             <h2>{{courseOutline.chpapter}}-{{courseOutline.node}} {{courseOutline.name}}</h2>
           </div>
@@ -77,6 +77,10 @@
       <div class="consult" @click="consult">
         <i class="icon iconfont">&#xe75b;</i>
         <span>咨询</span>
+      </div>
+      <div v-show="shopping" id="shopping">
+        <span v-if="shoppingCart==1">添加成功，在购物车等亲！</span>
+        <span v-else>亲，已经加过购物车了哟！</span>
       </div>
       <div class="shoppingCart" @click="goShopping" v-if="!courseSystems.isBuy&& courseSystems.price != 0">
         <span>加入购物车</span>
@@ -131,6 +135,8 @@ export default {
           comment: "Good！"
         }
       ],
+      /* courseOutlines1:[['课程简介','课程背景','课程背景'],['前端要学的','html工具']],
+      courseVideolink:[], */
       courseOutlines:[
           {
           chpapter:1,
@@ -162,7 +168,9 @@ export default {
           name:'html工具',
           videolink:''
         }
-      ]
+      ],
+      shoppingCart:0,
+      shopping:false
     }
   },
   computed:{
@@ -171,7 +179,7 @@ export default {
     }
   },
   created(){
-    console.log(this.$route.query.id);
+    /* console.log(this.$route.query.id); */
     let id=this.$route.query.id;
       this.$axios({
                 method:'get',
@@ -182,7 +190,7 @@ export default {
             }).then(res=>{
                 this.courseSystems = res.data;
             }).catch((error)=>{
-                alert(error);
+                console.log(error);
             });
             this.$axios({
                 method:'get',
@@ -191,10 +199,22 @@ export default {
                     cid:id,
                     uid:1
                 }
-            })
+            });
+            this.$axios({
+                method:'get',
+                url:'http://b3n79z.natappfre.cc/getcoursechapter',
+                params:{
+                    courseId:id,
+                    isBuy:this.isBuy
+                }
+            }).then(res=>{
+              this.courseOutlines = res.data;
+            }).catch((error)=>{
+                console.log(error);
+            });
   },
   mounted() {
-    plus.screen.lockOrientation('landscape-primary');
+   /*  plus.screen.lockOrientation('landscape-primary'); */
   },
   methods: {
     playClick(){
@@ -214,9 +234,26 @@ export default {
         (-index * document.documentElement.clientWidth) / 41.4 + "rem";
     },
     goShopping(){
-      this.$router.push({
-       path:'/shoppingCart'
+      clearTimeout(timer);
+      this.shopping = !this.shopping;
+     let timer = setTimeout(function(){
+        this.shopping = !this.shopping;
+      },8000)
+      let id=this.$route.query.id;
+      let postdata = this.$qs.stringify({
+        uid: 2,
+        cid:id
       });
+      this.$axios({
+                method:'post',
+                url:'http://192.168.0.101:8080/insertcart',
+                data:postdata
+            }).then(res=>{
+              console.log(res.data);
+                this.shoppingCart = res.data;
+            }).catch((error)=>{
+                console.log(error);
+            });
     },
     goBuy(){
       this.$router.push({
@@ -249,8 +286,9 @@ export default {
       this.$refs.ref.style.left =
         (index * document.documentElement.clientWidth) / 41.4 + "rem";
       this.current = -index;
-    }
+    },
   }
+
 };
 </script>
 <style>
@@ -352,6 +390,20 @@ export default {
   color: red;
   background-color: #fff;
   padding-top: .241546rem;
+}
+#shopping{
+width: 6.038647rem;
+  height: 1.690821rem;
+  border: .024155rem solid #000;
+  position: fixed;
+  right: .483092rem;
+  bottom: 2.415459rem;
+  color: #000;
+  background-color: #fff;
+  padding-top: .241546rem;
+}
+#shopping span{
+ font-size: .603865rem;
 }
 #f-coourse-system .shoppingCart,
 .nowBuy {
@@ -482,6 +534,17 @@ export default {
   width: 100%;
   text-indent: 2em;
   font: 0.434783rem "微软雅黑";
+}
+#courseOutline div h1{
+  padding: .120773rem 0;
+  font-size: .57971rem;
+  font-family: '宋体'
+}
+#courseOutline div h2{
+  color:#000;
+  margin: .048309rem 0;
+  font-size: .434783rem;
+  font-family: '微软雅黑'
 }
 #courseComment ul > p {
   font: bold 0.676329rem "宋体";
