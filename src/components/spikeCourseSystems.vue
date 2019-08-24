@@ -110,7 +110,8 @@ export default {
     return {
       // src:"../../../static/Intermission-Walk-in.ogv",
       //秒杀模块
-      cid: this.$route.query.cid,
+      cid: this.$route.query.cid, //存储传入的课程id
+      serverTime: 0, //存储服务器时间
       hh: "00",
       mm: "00",
       ss: "00",
@@ -123,15 +124,16 @@ export default {
       playStatus: "",
       isPlay: true,
       vComments: ["详情", "章节", "评价"],
-      spikeC: {
-        name: "Python3入门+进阶课程",
-        startTime: "2019-08-22 21:00",
-        origin_price: "799",
-        price: "199",
-        limited: 100,
-        img: "../../../static/imgs/actualcourse1.jpg",
-        detailed: "全面系统Python3入门+进阶课程 零基础学Python 小黑也能听懂"
-      },
+      // spikeC: {
+      //   name: "Python3入门+进阶课程",
+      //   startTime: "2019-08-23 14:00",
+      //   origin_price: "799",
+      //   price: "199",
+      //   limited: 100,
+      //   img: "../../../static/imgs/actualcourse1.jpg",
+      //   detailed: "全面系统Python3入门+进阶课程 零基础学Python 小黑也能听懂"
+      // },
+      spikeC: {},
       studentComments: [
         {
           name: "张****",
@@ -184,28 +186,56 @@ export default {
     };
   },
   async created() {
+    this.spike();
     this.Spike();
-    this.timeInterval = setInterval(() => {
-      this.Spike();
-    }, 1000);
   },
+  mounted() {
+    
+  },
+  // watch: {
+  //   serverTime: function() {
+  //     // this.kilometers = val;
+  //     // this.meters = this.kilometers * 1000;
+  //     this.timeInterval = setInterval(() => {
+  //       this.Spike();
+  //     }, 1000);
+  //   }
+  // },
   methods: {
     //首次请求
     spike() {
       this.$axios({
         method: "get",
-        url: "",
+        url: "http://192.168.1.35:80/getcourse",
         params: {
-          cid: this.cid
+          userId: 1,
+          courseId: this.cid,
+          kill: true
         }
-      }).then(res => {
-        
-      });
+      })
+        .then(response => {
+          this.spikeC = response.data;
+          this.serverTime = new Date(this.spikeC.date).getTime();
+          console.log(response.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
+    //倒计时方法
     Spike() {
-      var now = Date.now(); //当前服务器时间
-      var disStart = now - new Date(this.spikeC.startTime).getTime(); //开始时间和服务器时间之差
-      var disEnd = now - (new Date(this.spikeC.startTime).getTime() + 7200000); //结束时间和服务器时间之差
+      // var now = Date.now(); //当前服务器时间
+      var disStart =
+        this.serverTime - new Date(this.spikeC.startTime + ":00").getTime(); //开始时间和服务器时间之差
+      var disEnd =
+        this.serverTime -
+        (new Date(this.spikeC.startTime + ":00").getTime() + 7200000); //结束时间和服务器时间之差
+      console.log(disStart);
+      console.log(disEnd);
+      console.log(new Date(1566553288351));
+      console.log(this.spikeC);
+      console.log(this.spikeC.startTime);
+      console.log(this.spikeC.startTime + ":00");
       if (disStart < 0) {
         var countdown = Math.floor(-disStart / 1000);
         var iH = Math.floor(countdown / 3600);
@@ -233,6 +263,8 @@ export default {
         this.spikeButton = "售罄";
         this.spikeFlag = false;
       }
+      this.serverTime = this.serverTime - 1;
+      // console.log(this.serverTime)
     },
     //抢购请求
     panicBuying() {},

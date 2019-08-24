@@ -50,7 +50,6 @@ import footerGuide from "../../components/footerGuide";
 export default {
   data() {
     return {
-      msg: "您好"
     };
   },
   components: {
